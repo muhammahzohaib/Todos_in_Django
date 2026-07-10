@@ -24,22 +24,27 @@ A simple Todo CRUD REST API built with **Django REST Framework** and **MySQL**.
 
 ## Project Structure
 
-```
-task1/
+````
+myproject/
 │
-├── manage.py
-├── requirements.txt
-├── README.md
+├── myproject/                # Main configuration folder
+│   ├── __init__.py
+│   ├── settings.py           # Installed apps: 'users', 'todo', 'rest_framework'
+│   └── urls.py               # Routes to: api/v1/auth/ and api/v1/todos/
 │
-├── Config/
+├── users/                    # NEW: Dedicated Auth App
+│   ├── models.py             # Custom User Model
+|   |─- repositories.py       # Data isolation layer 
+│   ├── serializers.py.       # RegisterSerializer, LoginSerializer
+│   ├── views.py              # RegisterAPIView, LoginAPIView
+│   └── urls.py               # Routes for login/ and register/
 │
-└── todo/
-    ├── models.py
-    ├── serializers.py
-    ├── views.py
-    ├── urls.py
-    └── admin.py
-```
+└── todo/                     # Existing Core Feature App
+    ├── models.py             # Todo Model
+    ├── repositories.py       # TodoRepository (Data isolation layer)
+    ├── serializers.py        # TodoSerializer
+    ├── views.py              # TodoAPIView (Locked down with IsAuthenticated)
+    └── urls.py               # Routes for CRUD tasks
 
 ---
 
@@ -48,14 +53,8 @@ task1/
 ### Clone the repository
 
 ```bash
-git clone <repository_url>
-```
-
-### Move into the project
-
-```bash
-cd task1
-```
+git clone https://github.com/muhammahzohaib/Todos_in_Django
+````
 
 ### Create a virtual environment
 
@@ -140,13 +139,13 @@ http://127.0.0.1:8000/
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/api/create/` | Create Todo |
-| GET | `/api/list/` | Get All Todos |
-| GET | `/api/detail/<id>/` | Get Single Todo |
-| PUT | `/api/update/<id>/` | Update Todo |
-| DELETE | `/api/delete/<id>/` | Delete Todo |
+| Method | Endpoint            | Description     |
+| ------ | ------------------- | --------------- |
+| POST   | `/api/create/`      | Create Todo     |
+| GET    | `/api/list/`        | Get All Todos   |
+| GET    | `/api/detail/<id>/` | Get Single Todo |
+| PUT    | `/api/update/<id>/` | Update Todo     |
+| DELETE | `/api/delete/<id>/` | Delete Todo     |
 
 ---
 
@@ -162,11 +161,11 @@ Body
 
 ```json
 {
-    "title": "Learn Django",
-    "description": "Practice CRUD APIs",
-    "completed": false,
-    "priority": "HIGH",
-    "due_date": "2026-07-10"
+  "title": "Learn Django",
+  "description": "Practice CRUD APIs",
+  "completed": false,
+  "priority": "HIGH",
+  "due_date": "2026-07-10"
 }
 ```
 

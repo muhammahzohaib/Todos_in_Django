@@ -16,5 +16,5 @@ urlpatterns = [
     path('', TodoAPIView.as_view(), name='todo-list-create'),
     
     # Maps to GET (Retrieve), PUT (Update), and DELETE (Destroy) by routing the <int:pk>
-    path('todos/<int:pk>/', TodoAPIView.as_view(), name='todo-detail'),
+    path('<int:pk>/', TodoAPIView.as_view(), name='todo-detail'),
 ]

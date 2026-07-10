@@ -2,27 +2,21 @@ from .models import Todo
 
 class TodoRepository:
     @staticmethod
-    def get_all():
-        return Todo.objects.all()
+    def get_all_by_user(user_instance):
+        return Todo.objects.filter(user=user_instance)
 
     @staticmethod
-    def get_by_id(todo_id):
-        try:
-            return Todo.objects.get(id=todo_id)
-        except Todo.DoesNotExist:
-            return None
+    def get_by_id_and_user(todo_id, user_instance):
+        return Todo.objects.get(id=todo_id, user=user_instance)
 
     @staticmethod
-    def create(data):
-        return Todo.objects.create(
-            title=data['title'],
-            completed=data.get('completed', False)
-        )
+    def create(user_instance, validated_data):
+        return Todo.objects.create(user=user_instance, **validated_data)
 
     @staticmethod
-    def update(todo_instance, data):
-        todo_instance.title = data.get('title', todo_instance.title)
-        todo_instance.completed = data.get('completed', todo_instance.completed)
+    def update(todo_instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(todo_instance, attr, value)
         todo_instance.save()
         return todo_instance
 
