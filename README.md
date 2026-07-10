@@ -1,68 +1,107 @@
-# Django Todo CRUD API
+# Django Todo REST API
 
-A simple Todo CRUD REST API built with **Django REST Framework** and **MySQL**.
+A production-ready Todo REST API built with **Django REST Framework**, **MySQL**, and **JWT Authentication**.
 
-## Features
+The project follows clean architecture principles by using the **Repository Pattern**, **Global Exception Handling**, and **Custom User Authentication**.
 
+---
+
+# Features
+
+- User Registration
+- User Login (JWT Authentication)
+- Protected Todo APIs
 - Create Todo
 - Get All Todos
 - Get Single Todo
 - Update Todo
 - Delete Todo
+- Global Exception Handling
+- Repository Pattern
+- MySQL Database
+- Django Fixtures Support
 
 ---
 
-## Tech Stack
+# Tech Stack
 
-- Python
+- Python 3
 - Django
-- Django REST Framework (DRF)
+- Django REST Framework
+- Simple JWT
 - MySQL
 - Postman
 
 ---
 
-## Project Structure
+# Project Structure
 
-````
+```text
 myproject/
 │
-├── myproject/                # Main configuration folder
-│   ├── __init__.py
-│   ├── settings.py           # Installed apps: 'users', 'todo', 'rest_framework'
-│   └── urls.py               # Routes to: api/v1/auth/ and api/v1/todos/
+├── myproject/
+│   ├── settings.py
+│   ├── urls.py
+│   └── ...
 │
-├── users/                    # NEW: Dedicated Auth App
-│   ├── models.py             # Custom User Model
-|   |─- repositories.py       # Data isolation layer 
-│   ├── serializers.py.       # RegisterSerializer, LoginSerializer
-│   ├── views.py              # RegisterAPIView, LoginAPIView
-│   └── urls.py               # Routes for login/ and register/
+├── users/
+│   ├── models.py
+│   ├── serializers.py
+│   ├── repositories.py
+│   ├── exceptions.py
+│   ├── views.py
+│   └── urls.py
 │
-└── todo/                     # Existing Core Feature App
-    ├── models.py             # Todo Model
-    ├── repositories.py       # TodoRepository (Data isolation layer)
-    ├── serializers.py        # TodoSerializer
-    ├── views.py              # TodoAPIView (Locked down with IsAuthenticated)
-    └── urls.py               # Routes for CRUD tasks
+├── todo/
+│   ├── models.py
+│   ├── serializers.py
+│   ├── repositories.py
+│   ├── exceptions.py
+│   ├── views.py
+│   └── urls.py
+│
+├── utils/
+│   └── exceptions.py
+│
+├── /todos.json
+│
+│
+├── requirements.txt
+├── README.md
+└── manage.py
+```
 
 ---
 
-## Installation
+# Installation
 
-### Clone the repository
+## Clone Repository
 
 ```bash
-git clone https://github.com/muhammahzohaib/Todos_in_Django
-````
+git clone https://github.com/muhammadzohaib/Todos_in_Django.git
 
-### Create a virtual environment
+cd Todos_in_Django
+```
+
+---
+
+## Create Virtual Environment
+
+Mac/Linux
+
+```bash
+python3 -m venv .venv
+```
+
+Windows
 
 ```bash
 python -m venv .venv
 ```
 
-### Activate the virtual environment
+---
+
+## Activate Virtual Environment
 
 Mac/Linux
 
@@ -76,7 +115,9 @@ Windows
 .venv\Scripts\activate
 ```
 
-### Install dependencies
+---
+
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -84,11 +125,9 @@ pip install -r requirements.txt
 
 ---
 
-## Configure MySQL
+# Configure MySQL
 
-Create a MySQL database.
-
-Example:
+Create a database.
 
 ```sql
 CREATE DATABASE todo_db;
@@ -111,7 +150,7 @@ DATABASES = {
 
 ---
 
-## Apply Migrations
+# Apply Database Migrations
 
 ```bash
 python manage.py makemigrations
@@ -123,13 +162,31 @@ python manage.py migrate
 
 ---
 
-## Run Server
+# Load Sample Data (Fixtures)
+
+The project contains sample data inside the `fixtures` folder.
+
+Load it using:
+
+```bash
+python manage.py loaddata todos.json
+```
+
+To create your own fixture:
+
+```bash
+python manage.py dumpdata todo.Todo --indent 4 > todos.json
+```
+
+---
+
+# Run Development Server
 
 ```bash
 python manage.py runserver
 ```
 
-Server runs at:
+Server:
 
 ```
 http://127.0.0.1:8000/
@@ -137,42 +194,118 @@ http://127.0.0.1:8000/
 
 ---
 
-## API Endpoints
+# Authentication APIs
+
+| Method | Endpoint        |
+| ------ | --------------- |
+| POST   | /Auth/register/ |
+| POST   | /Auth/login/    |
+
+---
+
+# Todo APIs
+
+> All Todo APIs require a valid JWT Access Token.
 
 | Method | Endpoint            | Description     |
 | ------ | ------------------- | --------------- |
-| POST   | `/api/create/`      | Create Todo     |
-| GET    | `/api/list/`        | Get All Todos   |
-| GET    | `/api/detail/<id>/` | Get Single Todo |
-| PUT    | `/api/update/<id>/` | Update Todo     |
-| DELETE | `/api/delete/<id>/` | Delete Todo     |
+| GET    | /api/v1/todos/      | Get All Todos   |
+| GET    | /api/v1/todos/<id>/ | Get Single Todo |
+| POST   | /api/v1/todos/      | Create Todo     |
+| PUT    | /api/v1/todos/<id>/ | Update Todo     |
+| DELETE | /api/v1/todos/<id>/ | Delete Todo     |
 
 ---
 
-## Example Request
+# JWT Authentication
 
-### POST
-
-```
-POST /api/create/
-```
-
-Body
+After login, you'll receive:
 
 ```json
 {
-  "title": "Learn Django",
-  "description": "Practice CRUD APIs",
-  "completed": false,
-  "priority": "HIGH",
-  "due_date": "2026-07-10"
+  "access": "your_access_token",
+  "refresh": "your_refresh_token"
 }
+```
+
+Use the Access Token in Postman.
+
+```
+Authorization
+
+Bearer <access_token>
 ```
 
 ---
 
-## Author
+# Architecture
+
+This project follows a layered architecture.
+
+```
+Request
+     │
+     ▼
+APIView
+     │
+     ▼
+Repository Layer
+     │
+     ▼
+Database
+```
+
+Additional Components
+
+- Global Exception Handler
+- Custom Exceptions
+- JWT Authentication
+- Repository Pattern
+
+---
+
+# Global Exception Handling
+
+All exceptions are handled centrally through:
+
+```
+utils/exceptions.py
+```
+
+Supported Exception Handling:
+
+- Validation Errors
+- Database Errors
+- Object Not Found
+- Custom Business Exceptions
+- Unexpected Server Errors
+
+---
+
+# Fixtures
+
+The project includes Django Fixtures for importing sample data.
+
+Export data
+
+```bash
+python manage.py dumpdata todo.Todo --indent 4 > todos.json
+```
+
+Import data
+
+```bash
+python manage.py loaddata todos.json
+```
+
+# Author
 
 **Muhammad Zohaib**
 
-Backend Developer | Django | Django REST Framework | Python
+Backend Developer
+
+- Python
+- Django
+- Django REST Framework
+- MySQL
+- JWT Authentication
