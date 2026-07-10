@@ -224,7 +224,8 @@ After login, you'll receive:
 ```json
 {
   "access": "your_access_token",
-  "refresh": "your_refresh_token"
+  "refresh": "your_refresh_token",
+  "message" : ""
 }
 ```
 
