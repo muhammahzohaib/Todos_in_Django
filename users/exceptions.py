@@ -8,3 +8,7 @@ class UsernameAlreadyExistsException(BaseAPIException):
 class InvalidCredentialsException(BaseAPIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = "Invalid username or password."
+
+class InvalidTokenException(BaseAPIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "Invalid Token." 

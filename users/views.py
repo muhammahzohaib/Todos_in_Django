@@ -18,7 +18,12 @@ class RegisterAPIView(APIView):
             data=request.data
         )
 
-        serializer.is_valid(raise_exception=True) # we can generate the custom error
+        # serializer.is_valid(raise_exception=True) # we can generate the custom error
+        if not serializer.is_valid:
+            return Response ({
+                "MycustomError ": serializer.errors,
+                "status": 204
+            },status=status.HTTP_400_BAD_REQUEST)
 
         tokens = AuthService.register_user(
             username=serializer.validated_data["username"],
@@ -42,7 +47,12 @@ class LoginAPIView(APIView):
             data=request.data
         )
 
-        serializer.is_valid(raise_exception=True)
+        # serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid:
+            return Response({
+                "mycustomerror": serializer.errors,
+                "status":400
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         tokens = AuthService.login_user(
             username=serializer.validated_data["username"],

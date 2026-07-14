@@ -35,3 +35,4 @@ class AuthService:
             raise InvalidCredentialsException()
 
         return JWTService.generate_tokens(user)
+    

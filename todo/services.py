@@ -1,26 +1,29 @@
-# services.py
 from .repositories import TodoRepository
+
 
 class TodoService:
 
-    @classmethod
-    def get_todo(cls, pk, user):
-        return TodoRepository.get_by_id_and_user(pk, user)
+    @staticmethod
+    def get_todo(todo_id, current_user):
+        return TodoRepository.get_by_id_and_user( todo_id, current_user )
 
-    @classmethod
-    def list_todos(cls, user):
-        return TodoRepository.get_all_by_user(user)
+    @staticmethod
+    def list_todos(current_user):
+        return TodoRepository.get_all_by_user(current_user)
 
-    @classmethod
-    def create_todo(cls, user, validated_data):
-        return TodoRepository.create(user, validated_data)
+    @staticmethod
+    def create_todo(current_user, todo_payload):
+        return TodoRepository.create(current_user,todo_payload)
 
-    @classmethod
-    def update_todo(cls, pk, user, validated_data):
-        todo = TodoRepository.get_by_id_and_user(pk, user)
-        return TodoRepository.update(todo, validated_data)
+    @staticmethod
+    def update_todo(todo_id, current_user, updated_data):
+        todo_record = TodoRepository.get_by_id_and_user(todo_id, current_user
+        )
 
-    @classmethod
-    def delete_todo(cls, pk, user):
-        todo = TodoRepository.get_by_id_and_user(pk, user)
-        TodoRepository.delete(todo)
+        return TodoRepository.update(todo_record, updated_data )
+
+    @staticmethod
+    def delete_todo(todo_id, current_user):
+        todo_record = TodoRepository.get_by_id_and_user(todo_id,  current_user )
+
+        TodoRepository.delete(todo_record)
