@@ -142,28 +142,25 @@ pip install -r requirements.txt
 
 ---
 
-# Configure MySQL
+# Database Configuration
 
-Create a database.
+Create a MySQL database.
 
 ```sql
 CREATE DATABASE todo_db;
 ```
 
-Update `settings.py`
+Create a `.env` file in the project root and add the following variables:
 
-```python
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "todo_db",
-        "USER": "root",
-        "PASSWORD": "your_password",
-        "HOST": "localhost",
-        "PORT": "3306",
-    }
-}
+```env
+DB_NAME=todo_db
+DB_USER=your_mysql_username
+DB_PASSWORD=your_mysql_password
+DB_HOST=localhost
+DB_PORT=3306
 ```
+
+The project automatically loads these environment variables from the `.env` file.
 
 ---
 
@@ -331,8 +328,6 @@ Export
 ```bash
 python manage.py dumpdata todo.Todo --indent 4 > fixtures/todos.json
 ```
-
-
 
 # Author
 
